@@ -1,0 +1,58 @@
+name: Unzip Project
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  unzip:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Find and unzip project
+        run: |
+          set -e
+
+          ZIP_FILE=$(find . -maxdepth 1 -type f -name "*.zip" | head -n 1)
+
+          if [ -z "$ZIP_FILE" ]; then
+            echo "没有找到 ZIP 文件"
+            exit 1
+          fi
+
+          echo "找到：$ZIP_FILE"
+
+          mkdir -p .unzip_tmp
+          unzip -o "$ZIP_FILE" -d .unzip_tmp
+
+          FIRST_DIR=$(find .unzip_tmp -mindepth 1 -maxdepth 1 -type d | head -n 1)
+
+          if [ -n "$FIRST_DIR" ] && [ "$(find .unzip_tmp -mindepth 1 -maxdepth 1 | wc -l)" -eq 1 ]; then
+            cp -R "$FIRST_DIR"/. .
+          else
+            cp -R .unzip_tmp/. .
+          fi
+
+          rm -rf .unzip_tmp
+          rm -f "$ZIP_FILE"
+
+      - name: Commit extracted project
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          # 不提交 build-apk.yml，因为 GitHub Token 没有 workflows 权限
+          git add -A
+          git reset .github/workflows/build-apk.yml 2>/dev/null || true
+
+          if git diff --cached --quiet; then
+            echo "没有需要提交的变化"
+          else
+            git commit -m "Extract Android project from ZIP"
+            git push
+          fi
