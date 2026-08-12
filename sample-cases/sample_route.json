@@ -1,0 +1,12 @@
+{
+  "name": "Sample Route",
+  "visionEnabled": true,
+  "purpleMinPixels": 50,
+  "visionIntervalMs": 250,
+  "tripleTapGapMs": 70,
+  "actions": [
+    {"type":"tap","x":0.50,"y":0.82,"x2":0.50,"y2":0.82,"durationMs":80,"delayMs":0},
+    {"type":"swipe","x":0.50,"y":0.68,"x2":0.50,"y2":0.32,"durationMs":550,"delayMs":250},
+    {"type":"long_press","x":0.50,"y":0.50,"x2":0.50,"y2":0.50,"durationMs":700,"delayMs":350}
+  ]
+}

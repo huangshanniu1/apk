@@ -1,0 +1,11 @@
+{
+  "searchTemplate": "search_template.png",
+  "purpleHueStart": 260,
+  "purpleHueEnd": 315,
+  "purpleMinSaturation": 0.35,
+  "purpleMinValue": 0.25,
+  "purpleMinPixels": 50,
+  "visionIntervalMs": 250,
+  "tripleTapGapMs": 70,
+  "note": "Replace search_template.png with a crop from your own game's Search button."
+}
